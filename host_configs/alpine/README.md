@@ -44,8 +44,30 @@ sh docker_setup.sh  # no bash in alpine
 ```
 
 - Set up MergerFS
+  - Uncomment Edge repos in `/etc/apk/repositories`, `apk update`
   - Prepare mountpoints and install MergerFS
   ```
   bash mergerfs_prep.sh
   ```
   - Reboot. (This is necessary to get symlinks to `/dev/disk/by-id`.)
+  - Edit `/etc/fstab` by adding indiviual disks and the MergerFS pool
+  ```
+  # mount non-system disks
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...0a-part1	/mnt/parity01   ext4	defaults			0 0
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...04-part1	/mnt/parity02   ext4	defaults			0 0
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...14-part1	/mnt/disk01     ext4	defaults			0 0
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...43-part1	/mnt/disk02     ext4	defaults			0 0
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...0c-part1	/mnt/disk03     ext4	defaults			0 0
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...86-part1	/mnt/disk04     ext4	defaults			0 0
+  /dev/disk/by-id/ata-VBOX_HARDDISK_...61-part1	/mnt/cache01	ext4	defaults			0 0
+  # mount mergerfs storage
+  /mnt/disk*	/mnt/storage	mergerfs	direct_io,defaults,allow_other,minfreespace=100K,fsname=mergerfs	0 0
+  ```
+  Since Alpine doesn't come with `lsblk`, it might be useful to find out the
+  size of a disk for the purpose of identifying it using `cat /proc/partitions`.
+  - For some reson MergerFS mounting inside `fstab` doesn't work. I suspect it
+  relies on a service that's only started later, but I can't figure it out.
+  As a workaround, run
+  ```
+  bash mergerfs_startup.sh
+  ```
