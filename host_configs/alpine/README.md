@@ -72,7 +72,7 @@ sh docker_setup.sh  # no bash in alpine
   bash mergerfs_startup.sh
   ```
 
-- Set up SnapRAID: <br>
+- Set up SnapRAID:
 ```
 cd ../..  # back into the standard server config
 bash snapraid_setup/snapraid_setup.sh

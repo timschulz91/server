@@ -24,5 +24,5 @@ rc-update add fuse boot
 
 # install udev to get /dev/disk/by-id
 apk add udev --no-cache
-rc-update add udev sysinit
-rc-update add udev-trigger sysinit
+rc-update add udev boot
+rc-update add udev-trigger boot
