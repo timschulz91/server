@@ -1,0 +1,174 @@
+# /opt/docker-compose.yml
+---
+version: '2'
+services:
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    volumes:
+      - /mnt/cache/appdata/plex:/config
+      - /mnt/storage/media:/media
+    network_mode: host
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - VERSION=latest
+  plexpy:
+    image: linuxserver/plexpy
+    container_name: plexpy
+    depends_on:
+      - plex
+    volumes:
+      - /mnt/cache/appdata/plexpy:/config
+      - /opt/appdata/plex/Library/Application\ Support/Plex\ Media\ Server/Logs:/logs:ro
+    ports:
+      - 8181:8181
+    links:
+      - plex
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+  radarr:
+    image: binhex/arch-radarr
+    container_name: radarr
+    volumes:
+      - /mnt/storage/download:/data
+      - /mnt/storage/media/movies:/media
+      - /mnt/cache/appdata/binhex-radarr:/config
+    ports:
+      - 7878:7878
+    depends_on:
+      - jackett
+      - rtorrent
+    links:
+      - jackett
+      - rtorrent
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+  duckdns:
+    image: luxserver/duckdns
+    container_name: duckdns
+    environment:
+      - SUBDOMAINS=${SUBDOMAINS}
+      - TOKEN=${TOKEN}
+  emby:
+    image: emby/embyserver
+    container_name: emby
+    volumes:
+      - /mnt/storage/media:/mnt
+      - /mnt/storage/cache/appdata/EmbyServer:/config
+    ports:
+      - 8096:8096
+    environment:
+      - APP_UID=${PUID}
+      - APP_GID=${PGID}
+    restart: always
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    volumes:
+      - /mnt/cache/appdata/jackett
+    ports:
+      - 9117:9117
+    restart: always
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    depends_on:
+      - duckdns
+    volumes:
+      - /mnt/cache/appdata/letsencrypt:/config
+    ports:
+      - 81:80
+      - 443:443
+    environment:
+      - EMAIL=${EMAIL}
+      - URL=${URL}
+      - SUBDOMAINS=${SUBDOMAINS}
+      - ONLY_SUBDOMAINS=true
+      - DHLEVEL=2048
+      - PUID=${PUID}
+      - PGID=${PGID}
+    restart: always
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    depends_on:
+      - letsencrypt
+      - radarr
+      - sonarr
+    links:
+      - radarr
+      - sonarr
+    volumes:
+      - /mnt/cache/appdata/ombi:/config
+    ports:
+      - 3001:3579
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    restart: always
+  organizr:
+    image: lsiocommunity/organizr
+    container_name: organizr
+    volumes:
+      - /mnt/cache/appdata/organizr:/config
+    ports:
+      - 90:80
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    restart: always
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    depends_on:
+      - rtorrent
+    links:
+      - rtorrent
+    volumes:
+      - /mnt/storage/downloads:/data
+      - /mnt/storage/media/Shows:/tv
+    ports:
+      - 8989:8989
+      - 9898:9898
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    restart: always
+  rtorrent:
+    image: binhex/arch-rtorrentvpn
+    container_name: rtorrent
+    volumes:
+      - /mnt/storage/downloads:/data
+      - /mnt/cache/appdata/binhex-rtorrentvpn:/config
+    ports:
+      - 3000:3000
+      - 5000:5000
+      - 9080:9080
+      - 9443:9443
+      - 8118:8118
+    environment:
+      - VPN_ENABLED=yes
+      - VPN_USER=${VPN_USER}
+      - VPN_PASS=${VPN_PASS}
+      - VPN_REMOTE=ca.privateinternetaccess.com
+      - VPN_PORT=1198
+      - VPN_PROTOCOL=udp
+      - VPN_PROV=pia
+      - STRONG_CERTS=no
+      - ENABLE_PRIVOXY=no
+      - LAN_NETWORK=${LAN_NETWORK}
+      - NAME_SERVERS=8.8.8.8,37.235.1.174,8.8.4.4,37.235.1.177
+      - DEBUG=false
+      - PHP_TZ=${PHP_TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    restart: always
