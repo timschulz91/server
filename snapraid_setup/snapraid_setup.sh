@@ -4,4 +4,4 @@
 apk add snapraid
 
 # copy config files into system
-cp snapraid_setup/configs/snapraid.conf /etc/snapraid.conf
+cp snapraid_setup/config/snapraid.conf /etc/snapraid.conf
