@@ -7,7 +7,7 @@ services:
     container_name: plex
     volumes:
       - /mnt/cache/appdata/plex:/config
-      - /mnt/storage/media:/media
+      - /mnt/storage/Media:/media
     network_mode: host
     restart: always
     environment:
@@ -34,8 +34,8 @@ services:
     image: binhex/arch-radarr
     container_name: radarr
     volumes:
-      - /mnt/storage/download:/data
-      - /mnt/storage/media/movies:/media
+      - /mnt/storage/Downloads:/data
+      - /mnt/storage/Media/Movies:/media
       - /mnt/cache/appdata/binhex-radarr:/config
     ports:
       - 7878:7878
@@ -50,7 +50,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
   duckdns:
-    image: luxserver/duckdns
+    image: linuxserver/duckdns
     container_name: duckdns
     environment:
       - SUBDOMAINS=${SUBDOMAINS}
@@ -59,8 +59,8 @@ services:
     image: emby/embyserver
     container_name: emby
     volumes:
-      - /mnt/storage/media:/mnt
-      - /mnt/storage/cache/appdata/EmbyServer:/config
+      - /mnt/storage/Media:/mnt
+      - /mnt/cache/appdata/EmbyServer:/config
     ports:
       - 8096:8096
     environment:
@@ -134,8 +134,8 @@ services:
     links:
       - rtorrent
     volumes:
-      - /mnt/storage/downloads:/data
-      - /mnt/storage/media/Shows:/tv
+      - /mnt/storage/Downloads:/data
+      - /mnt/storage/Media/Shows:/tv
     ports:
       - 8989:8989
       - 9898:9898
@@ -147,7 +147,7 @@ services:
     image: binhex/arch-rtorrentvpn
     container_name: rtorrent
     volumes:
-      - /mnt/storage/downloads:/data
+      - /mnt/storage/Downloads:/data
       - /mnt/cache/appdata/binhex-rtorrentvpn:/config
     ports:
       - 3000:3000
