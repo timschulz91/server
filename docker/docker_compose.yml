@@ -8,6 +8,7 @@ services:
     volumes:
       - /mnt/cache/appdata/plex:/config
       - /mnt/storage/Media:/media
+      - /mnt/cache/.transcode_temp:/transcode_temp
     network_mode: host
     restart: always
     environment:
