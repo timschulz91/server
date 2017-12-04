@@ -38,6 +38,7 @@ services:
       - /mnt/storage/Downloads:/data
       - /mnt/storage/Media/Movies:/media
       - /mnt/cache/appdata/binhex-radarr:/config
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 7878:7878
     depends_on:
@@ -139,6 +140,7 @@ services:
     volumes:
       - /mnt/storage/Downloads:/data
       - /mnt/storage/Media/Shows:/tv
+      - /mnt/cache/appdata/Sonarr:/config
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 8989:8989
