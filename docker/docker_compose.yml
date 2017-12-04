@@ -73,6 +73,8 @@ services:
     container_name: jackett
     volumes:
       - /mnt/cache/appdata/jackett
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/storage/Downloads:/downloads
     ports:
       - 9117:9117
     restart: always
