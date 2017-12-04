@@ -148,6 +148,7 @@ services:
   rtorrent:
     image: binhex/arch-rtorrentvpn
     container_name: rtorrent
+    privileged: true
     volumes:
       - /mnt/storage/Downloads:/data
       - /mnt/cache/appdata/binhex-rtorrentvpn:/config
