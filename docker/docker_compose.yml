@@ -137,6 +137,7 @@ services:
     volumes:
       - /mnt/storage/Downloads:/data
       - /mnt/storage/Media/Shows:/tv
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 8989:8989
       - 9898:9898
@@ -150,6 +151,7 @@ services:
     volumes:
       - /mnt/storage/Downloads:/data
       - /mnt/cache/appdata/binhex-rtorrentvpn:/config
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 3000:3000
       - 5000:5000
@@ -166,6 +168,7 @@ services:
       - VPN_PROV=pia
       - STRONG_CERTS=no
       - ENABLE_PRIVOXY=no
+      - ENABLE_FLOOD=yes
       - LAN_NETWORK=${LAN_NETWORK}
       - NAME_SERVERS=8.8.8.8,37.235.1.174,8.8.4.4,37.235.1.177
       - DEBUG=false
