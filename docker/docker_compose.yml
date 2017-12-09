@@ -181,3 +181,38 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
     restart: always
+  netdata:
+    image: titpetric/netdata
+    container_name: netdata
+    cap_add: SYS_PTRACE
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    ports:
+      - 19999:19999
+  deluge:
+    image: binhex/arch-delugevpn
+    container_name: deluge
+    cap_add: NET_ADMIN
+    volumes:
+      - /mnt/strorage/Downloads:/data
+      - /mnt/cache/appdata/binhex-delugevpn:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8112:8112
+      - 8118:8118
+      - 58846:58846
+      - 58946:58946
+    environment:
+      - VPN_ENABLED=yes
+      - VPN_USER=${VPN_USER}
+      - VPN_PASS=${VPN_PASS}
+      - VPN_PROV=pia
+      - STRICT_PORT_FORWARDING=yes
+      - ENABLE_PRIVOXY=no
+      - LAN_NETWORK=${LAN_NETWORK}
+      - NAME_SERVERS=209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4
+      - DEBUG=false
+      - UMASK=000
+      - PUID=${PUID}
+      - PGID=${PGID}
