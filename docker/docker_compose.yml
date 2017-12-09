@@ -73,7 +73,7 @@ services:
     image: linuxserver/jackett
     container_name: jackett
     volumes:
-      - /mnt/cache/appdata/jackett
+      - /mnt/cache/appdata/jackett:/config
       - /etc/localtime:/etc/localtime:ro
       - /mnt/storage/Downloads:/downloads
     ports:
