@@ -184,7 +184,8 @@ services:
   netdata:
     image: titpetric/netdata
     container_name: netdata
-    cap_add: SYS_PTRACE
+    cap_add:
+      - SYS_PTRACE
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -193,7 +194,8 @@ services:
   deluge:
     image: binhex/arch-delugevpn
     container_name: deluge
-    cap_add: NET_ADMIN
+    cap_add:
+      - NET_ADMIN
     volumes:
       - /mnt/strorage/Downloads:/data
       - /mnt/cache/appdata/binhex-delugevpn:/config
