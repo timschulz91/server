@@ -43,10 +43,10 @@ services:
       - 7878:7878
     depends_on:
       - jackett
-      - rtorrent
+      - deluge
     links:
       - jackett
-      - rtorrent
+      - deluge
     restart: always
     environment:
       - PUID=${PUID}
@@ -134,9 +134,9 @@ services:
     image: linuxserver/sonarr
     container_name: sonarr
     depends_on:
-      - rtorrent
+      - deluge
     links:
-      - rtorrent
+      - deluge
     volumes:
       - /mnt/storage/Downloads:/data
       - /mnt/storage/Media/Shows:/tv
@@ -149,37 +149,6 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
     restart: always
-  rtorrent:
-    image: binhex/arch-rtorrentvpn
-    container_name: rtorrent
-    privileged: true
-    volumes:
-      - /mnt/storage/Downloads:/data
-      - /mnt/cache/appdata/binhex-rtorrentvpn:/config
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 3000:3000
-      - 5000:5000
-      - 9080:9080
-      - 9443:9443
-      - 8118:8118
-    environment:
-      - VPN_ENABLED=yes
-      - VPN_USER=${VPN_USER}
-      - VPN_PASS=${VPN_PASS}
-      - VPN_REMOTE=ca.privateinternetaccess.com
-      - VPN_PORT=1198
-      - VPN_PROTOCOL=udp
-      - VPN_PROV=pia
-      - STRONG_CERTS=no
-      - ENABLE_PRIVOXY=no
-      - ENABLE_FLOOD=yes
-      - LAN_NETWORK=${LAN_NETWORK}
-      - NAME_SERVERS=8.8.8.8,37.235.1.174,8.8.4.4,37.235.1.177
-      - DEBUG=false
-      - PHP_TZ=${PHP_TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
     restart: always
   netdata:
     image: titpetric/netdata
