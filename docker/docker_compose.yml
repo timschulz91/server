@@ -166,7 +166,7 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - /mnt/strorage/Downloads:/data
+      - /mnt/storage/Downloads:/data
       - /mnt/cache/appdata/binhex-delugevpn:/config
       - /etc/localtime:/etc/localtime:ro
     ports:
