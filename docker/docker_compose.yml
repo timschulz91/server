@@ -149,7 +149,6 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
     restart: always
-    restart: always
   netdata:
     image: titpetric/netdata
     container_name: netdata
