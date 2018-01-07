@@ -201,3 +201,37 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
+
+
+# Nextcloud Config
+  nextcloud_db:
+    image: mariadb:10
+    container_name: nextcloud_db
+    restart: always
+    volumes:
+      - /mnt/cache/appdata/nextcloud_db:/var/lib/mysql
+      - /dev/zero:/null
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - TZ=${PHP_TZ}
+
+  nextcloud:
+    image: linuxserver/nextcloud
+    container_name: nextcloud
+    restart: always
+    depends_on:
+      - nextcloud_db
+    volumes:
+      - /mnt/storage/cloud:/data
+      - /mnt/cache/appdata/nextcloud:/config
+    ports:
+      - 444:443
+    environment:
+      - TZ=${PHP_TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
