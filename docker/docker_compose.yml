@@ -191,3 +191,17 @@ services:
       - UMASK=000
       - PUID=${PUID}
       - PGID=${PGID}
+
+  duplicati:
+    image: linuxserver/duplicati
+    container_name: duplicati
+    restart: always
+    volumes:
+      - /mnt/cache/appdata/duplicati:/config
+      - /mnt/cache:/cache
+      - /mnt/storage:/storage
+    ports:
+      - 8200:8200
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
